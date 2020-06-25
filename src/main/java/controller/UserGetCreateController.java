@@ -4,7 +4,6 @@ import db.DataBase;
 import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import webserver.RequestHandler;
 
 import java.io.DataOutputStream;
 import java.io.File;
@@ -15,11 +14,11 @@ import java.util.Map;
 
 import static util.HttpRequestUtils.parseQueryString;
 
-class UserCreateController implements Controller {
-    private static final Controller instance = new UserCreateController();
-    private static final Logger log = LoggerFactory.getLogger(UserCreateController.class);
+class UserGetCreateController implements Controller {
+    private static final Controller instance = new UserGetCreateController();
+    private static final Logger log = LoggerFactory.getLogger(UserGetCreateController.class);
 
-    private UserCreateController() {}
+    private UserGetCreateController() {}
 
     public static Controller getInstance() {
         return instance;

@@ -29,7 +29,7 @@ public class RequestHandler extends Thread {
             Map<String, String> requestInfo = getRequestInfoFrom(in);
             log.debug("Method: {}, Path: {}", requestInfo.get("Method"), requestInfo.get("Path"));
 
-            Controller c = ControllerConstructor.getController(requestInfo.get("Path"));
+            Controller c = ControllerConstructor.getController(requestInfo);
             c.process(requestInfo, out);
         } catch (IOException e) {
             log.error(e.getMessage());
