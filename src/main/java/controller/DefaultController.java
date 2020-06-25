@@ -12,7 +12,14 @@ import java.nio.file.Files;
 import java.util.Map;
 
 public class DefaultController implements Controller{
+    private static final Controller instance = new DefaultController();
     private static final Logger log = LoggerFactory.getLogger(RequestHandler.class);
+
+    private DefaultController() {}
+
+    public static Controller getInstance() {
+        return instance;
+    }
 
     @Override
     public void process(Map<String, String> requestInfo, OutputStream out) throws IOException {

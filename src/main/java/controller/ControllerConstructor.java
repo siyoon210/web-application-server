@@ -7,14 +7,14 @@ import java.util.Objects;
 public class ControllerConstructor {
     private final static Map<String, Controller> pathAndControllers = new HashMap<>();
     static {
-        pathAndControllers.put("/", new MainController());
-        pathAndControllers.put("/index.html", new MainController());
+        pathAndControllers.put("/", MainController.getInstance());
+        pathAndControllers.put("/index.html", MainController.getInstance());
     }
 
     public static Controller getController(String path) {
         final Controller controller = pathAndControllers.get(path);
         if (Objects.isNull(controller)) {
-            return new DefaultController();
+            return DefaultController.getInstance();
         }
         return controller;
     }
