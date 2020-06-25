@@ -11,6 +11,7 @@ public class ControllerConstructor {
         pathAndControllers.put("GET /user/create", UserGetCreateController.getInstance());
         pathAndControllers.put("POST /user/create", UserPostCreateController.getInstance());
         pathAndControllers.put("POST /user/login", UserLoginController.getInstance());
+        pathAndControllers.put("GET /user/list", UserListController.getInstance());
     }
 
     public static Controller getController(Map<String, String> requestInfo) {
