@@ -8,7 +8,6 @@ public class ControllerConstructor {
     private final static Map<String, Controller> pathAndControllers = new HashMap<>();
     static {
         pathAndControllers.put("/", MainController.getInstance());
-        pathAndControllers.put("/index.html", MainController.getInstance());
     }
 
     public static Controller getController(String path) {
