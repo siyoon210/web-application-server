@@ -11,11 +11,12 @@ import java.io.OutputStream;
 import java.nio.file.Files;
 import java.util.Map;
 
-class DefaultController implements Controller{
+class DefaultController implements Controller {
     private static final Controller instance = new DefaultController();
     private static final Logger log = LoggerFactory.getLogger(DefaultController.class);
 
-    private DefaultController() {}
+    private DefaultController() {
+    }
 
     public static Controller getInstance() {
         return instance;
@@ -23,17 +24,19 @@ class DefaultController implements Controller{
 
     @Override
     public void process(Map<String, String> requestInfo, OutputStream out) throws IOException {
-        final byte[] body = Files.readAllBytes(new File("./webapp" + requestInfo.get("Path")).toPath());
+        final String path = requestInfo.get("Path");
+        final byte[] body = Files.readAllBytes(new File("./webapp" + path).toPath());
 
+        final String fileType = path.substring(path.lastIndexOf(".") + 1);
         DataOutputStream dos = new DataOutputStream(out);
-        response200Header(dos, body.length);
+        response200Header(dos, body.length, fileType);
         responseBody(dos, body);
     }
 
-    private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
+    private void response200Header(DataOutputStream dos, int lengthOfBodyContent, String fileType) {
         try {
             dos.writeBytes("HTTP/1.1 200 OK \r\n");
-            dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
+            dos.writeBytes("Content-Type: text/" + fileType + ";charset=utf-8\r\n");
             dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
             dos.writeBytes("\r\n");
         } catch (IOException e) {
