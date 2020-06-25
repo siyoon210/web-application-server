@@ -4,10 +4,13 @@ import controller.Controller;
 import controller.ControllerConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import util.HttpRequestUtils;
 
 import java.io.*;
 import java.net.Socket;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import static util.HttpRequestUtils.getRequestInfoFrom;
 
@@ -27,7 +30,12 @@ public class RequestHandler extends Thread {
         try (InputStream in = connection.getInputStream();
              OutputStream out = connection.getOutputStream()) {
             Map<String, String> requestInfo = getRequestInfoFrom(in);
+
             log.debug("Method: {}, Path: {}", requestInfo.get("Method"), requestInfo.get("Path"));
+
+            for (Map.Entry<String, String> stringStringEntry : requestInfo.entrySet()) {
+                System.out.println(stringStringEntry.getKey() + ", " + stringStringEntry.getValue());
+            }
 
             Controller c = ControllerConstructor.getController(requestInfo);
             c.process(requestInfo, out);

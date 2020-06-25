@@ -36,8 +36,8 @@ class UserGetCreateController implements Controller {
         final byte[] body = Files.readAllBytes(new File("./webapp" + "/index.html").toPath());
 
         final DataOutputStream dos = new DataOutputStream(out);
-        response200Header(dos, 0);
-        responseBody(dos, null);
+        response200Header(dos, body.length);
+        responseBody(dos, body);
     }
 
     private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {

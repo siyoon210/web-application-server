@@ -117,6 +117,7 @@ public class HttpRequestUtils {
         final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in));
         Map<String, String> requestInfo = new HashMap<>();
         String line;
+        int contentLength = 0;
         while (!"".equals(line = bufferedReader.readLine())) {
             if (Objects.isNull(line)) {
                 break;
@@ -131,7 +132,19 @@ public class HttpRequestUtils {
             }
 
             final Pair pair = parseHeader(line);
+            if (pair == null) {
+                continue;
+            }
+
+            if (pair.key.equals("Content-Length")) {
+                contentLength = Integer.parseInt(pair.value);
+            }
             requestInfo.put(pair.key, pair.value);
+        }
+
+        if (contentLength > 0) {
+            String body = IOUtils.readData(bufferedReader, contentLength);
+            requestInfo.put("body", body);
         }
 
         return requestInfo;

@@ -26,9 +26,8 @@ class UserPostCreateController implements Controller {
 
     @Override
     public void process(Map<String, String> requestInfo, OutputStream out) throws IOException {
-        final String path = requestInfo.get("Path");
-        final Map<String, String> queryString = parseQueryString(path.split("\\?")[1]);
-        User newUser = new User(queryString.get("userId"), queryString.get("password"), queryString.get("name"), queryString.get("email"));
+        final Map<String, String> content = parseQueryString(requestInfo.get("body"));
+        User newUser = new User(content.get("userId"), content.get("password"), content.get("name"), content.get("email"));
 
         log.info("Create User: {}", newUser.toString());
         DataBase.addUser(newUser);
@@ -36,8 +35,8 @@ class UserPostCreateController implements Controller {
         final byte[] body = Files.readAllBytes(new File("./webapp" + "/index.html").toPath());
 
         final DataOutputStream dos = new DataOutputStream(out);
-        response200Header(dos, 0);
-        responseBody(dos, null);
+        response200Header(dos, body.length);
+        responseBody(dos, body);
     }
 
     private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
