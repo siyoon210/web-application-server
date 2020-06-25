@@ -1,7 +1,7 @@
 package controller;
 
-import model.Response;
-import model.StaticFileResponse;
+import controller.model.Response;
+import controller.model.StaticFileResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

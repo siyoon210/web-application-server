@@ -1,4 +1,4 @@
-package model;
+package controller.model;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,20 +9,16 @@ import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-public class RedirectResponse implements Response{
-    private static final Logger log = LoggerFactory.getLogger(RedirectResponse.class);
+public class StaticFileResponse implements Response {
+    private static final Logger log = LoggerFactory.getLogger(StaticFileResponse.class);
 
     private final int status;
     private final Map<String, String> headers;
-    private final Map<String, String> cookies;
-    private final String location;
     private final byte[] body;
 
-    public RedirectResponse(int status, Map<String, String> headers, Map<String, String> cookies, String location, byte[] body) {
+    private StaticFileResponse(int status, Map<String, String> headers, byte[] body) {
         this.status = status;
         this.headers = headers;
-        this.cookies = cookies;
-        this.location = location;
         this.body = body;
     }
 
@@ -40,8 +36,6 @@ public class RedirectResponse implements Response{
     private void writeHeader(DataOutputStream dos) {
         try {
             dos.writeBytes("HTTP/1.1 " + status + " \r\n");
-            dos.writeBytes("Location: " + location + " \r\n");
-            dos.writeBytes("Set-Cookie: " + "logined=" + cookies.get("logined") + "\r\n");
             for (Map.Entry<String, String> header : headers.entrySet()) {
                 dos.writeBytes(header.getKey() + ": " + header.getValue() + "\r\n");
             }
@@ -53,9 +47,7 @@ public class RedirectResponse implements Response{
 
     private void writeBody(DataOutputStream dos) {
         try {
-            if (body != null) {
-                dos.write(body, 0, body.length);
-            }
+            dos.write(body, 0, body.length);
             dos.flush();
         } catch (IOException e) {
             log.error(e.getMessage());
@@ -65,13 +57,10 @@ public class RedirectResponse implements Response{
     public static class Builder {
         private int status;
         private final Map<String, String> headers;
-        private final Map<String, String> cookies;
-        private String location;
         private byte[] body;
 
         public Builder() {
             headers = new HashMap<>();
-            cookies = new HashMap<>();
         }
 
         public Builder status(int status) {
@@ -89,23 +78,13 @@ public class RedirectResponse implements Response{
             return this;
         }
 
-        public Builder cookie(String key, boolean value) {
-            this.cookies.put(key, String.valueOf(value));
-            return this;
-        }
-
-        public Builder location(String location) {
-            this.location = location;
-            return this;
-        }
-
         public Builder body(byte[] body) {
             this.body = body;
             return this;
         }
 
-        public RedirectResponse build() {
-            return new RedirectResponse(status, headers, cookies, location, body);
+        public StaticFileResponse build() {
+            return new StaticFileResponse(status, headers, body);
         }
     }
 }

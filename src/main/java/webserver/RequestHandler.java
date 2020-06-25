@@ -2,7 +2,7 @@ package webserver;
 
 import controller.Controller;
 import controller.ControllerConstructor;
-import model.Response;
+import controller.model.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,8 +30,8 @@ public class RequestHandler extends Thread {
         try (InputStream in = connection.getInputStream();
              OutputStream out = connection.getOutputStream()) {
             final Map<String, String> requestInfo = getRequestInfoFrom(in);
-            final Controller c = ControllerConstructor.getController(requestInfo);
-            final Response response = c.process(requestInfo);
+            final Controller controller = ControllerConstructor.getController(requestInfo);
+            final Response response = controller.process(requestInfo);
             response.write(out);
         } catch (IOException e) {
             log.error(e.getMessage());

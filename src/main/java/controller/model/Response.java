@@ -1,4 +1,4 @@
-package model;
+package controller.model;
 
 import java.io.OutputStream;
 

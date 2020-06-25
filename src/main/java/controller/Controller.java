@@ -1,6 +1,6 @@
 package controller;
 
-import model.Response;
+import controller.model.Response;
 
 import java.io.IOException;
 import java.util.Map;
