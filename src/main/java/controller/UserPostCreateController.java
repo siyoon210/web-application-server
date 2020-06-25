@@ -32,28 +32,15 @@ class UserPostCreateController implements Controller {
         log.info("Create User: {}", newUser.toString());
         DataBase.addUser(newUser);
 
-        final byte[] body = Files.readAllBytes(new File("./webapp" + "/index.html").toPath());
-
         final DataOutputStream dos = new DataOutputStream(out);
-        response200Header(dos, body.length);
-        responseBody(dos, body);
+        response302Header(dos, "/");
     }
 
-    private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
+    private void response302Header(DataOutputStream dos, String url) {
         try {
-            dos.writeBytes("HTTP/1.1 200 OK \r\n");
-            dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
-            dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
+            dos.writeBytes("HTTP/1.1 302 Redirect \r\n");
+            dos.writeBytes("Location: " + url + "\r\n");
             dos.writeBytes("\r\n");
-        } catch (IOException e) {
-            log.error(e.getMessage());
-        }
-    }
-
-    private void responseBody(DataOutputStream dos, byte[] body) {
-        try {
-            dos.write(body, 0, 0);
-            dos.flush();
         } catch (IOException e) {
             log.error(e.getMessage());
         }
