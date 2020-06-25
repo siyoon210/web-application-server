@@ -7,8 +7,7 @@ import java.util.Objects;
 public class ControllerConstructor {
     private final static Map<String, Controller> pathAndControllers = new HashMap<>();
     static {
-        pathAndControllers.put("GET /user/create", UserGetCreateController.getInstance());
-        pathAndControllers.put("POST /user/create", UserPostCreateController.getInstance());
+        pathAndControllers.put("POST /user/create", UserCreateController.getInstance());
         pathAndControllers.put("POST /user/login", UserLoginController.getInstance());
         pathAndControllers.put("GET /user/list", UserListController.getInstance());
     }
@@ -18,7 +17,7 @@ public class ControllerConstructor {
         String path = requestInfo.get("Path");
 
         if (hasQueryString(path)) {
-            path = path.split("\\?")[0];
+            path = subStringQueryString(path);
         }
 
         final Controller controller = pathAndControllers.get(method + " " + path);
@@ -28,6 +27,10 @@ public class ControllerConstructor {
         }
 
         return controller;
+    }
+
+    private static String subStringQueryString(String path) {
+        return path.split("\\?")[0];
     }
 
     private static boolean hasQueryString(String path) {

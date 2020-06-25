@@ -2,15 +2,16 @@ package webserver;
 
 import controller.Controller;
 import controller.ControllerConstructor;
+import model.Response;
+import model.StaticFileResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import util.HttpRequestUtils;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.Socket;
-import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 import static util.HttpRequestUtils.getRequestInfoFrom;
 
@@ -30,11 +31,9 @@ public class RequestHandler extends Thread {
         try (InputStream in = connection.getInputStream();
              OutputStream out = connection.getOutputStream()) {
             Map<String, String> requestInfo = getRequestInfoFrom(in);
-
-            log.debug("Method: {}, Path: {}", requestInfo.get("Method"), requestInfo.get("Path"));
-
-            Controller c = ControllerConstructor.getController(requestInfo);
-            c.process(requestInfo, out);
+            final Controller c = ControllerConstructor.getController(requestInfo);
+            final Response response = c.process(requestInfo);
+            response.write(out);
         } catch (IOException e) {
             log.error(e.getMessage());
         }
