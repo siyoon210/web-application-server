@@ -130,8 +130,8 @@ public class HttpRequestUtils {
                 continue;
             }
 
-            final int i = line.indexOf(":");
-            requestInfo.put(line.substring(0, i), line.substring(i + 2));
+            final Pair pair = parseHeader(line);
+            requestInfo.put(pair.key, pair.value);
         }
 
         return requestInfo;
