@@ -26,7 +26,7 @@ class UserLoginController implements Controller {
     }
 
     @Override
-    public Response process(Map<String, String> requestInfo) throws IOException {
+    public Response process(Map<String, String> requestInfo) {
         final Map<String, String> content = parseQueryString(requestInfo.get("body"));
         final User user = DataBase.findUserById(content.get("userId"));
 

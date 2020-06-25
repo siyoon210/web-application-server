@@ -23,9 +23,9 @@ class UserCreateController implements Controller {
     }
 
     @Override
-    public Response process(Map<String, String> requestInfo) throws IOException {
+    public Response process(Map<String, String> requestInfo) {
         final Map<String, String> content = parseQueryString(requestInfo.get("body"));
-        User newUser = new User(content.get("userId"), content.get("password"), content.get("name"), content.get("email"));
+        User newUser = new User(content);
 
         log.info("Create User: {}", newUser.toString());
         DataBase.addUser(newUser);
