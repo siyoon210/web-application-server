@@ -3,7 +3,6 @@ package webserver;
 import controller.Controller;
 import controller.ControllerConstructor;
 import model.Response;
-import model.StaticFileResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,7 +29,7 @@ public class RequestHandler extends Thread {
 
         try (InputStream in = connection.getInputStream();
              OutputStream out = connection.getOutputStream()) {
-            Map<String, String> requestInfo = getRequestInfoFrom(in);
+            final Map<String, String> requestInfo = getRequestInfoFrom(in);
             final Controller c = ControllerConstructor.getController(requestInfo);
             final Response response = c.process(requestInfo);
             response.write(out);
