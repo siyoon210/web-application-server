@@ -33,10 +33,6 @@ public class RequestHandler extends Thread {
 
             log.debug("Method: {}, Path: {}", requestInfo.get("Method"), requestInfo.get("Path"));
 
-            for (Map.Entry<String, String> stringStringEntry : requestInfo.entrySet()) {
-                System.out.println(stringStringEntry.getKey() + ", " + stringStringEntry.getValue());
-            }
-
             Controller c = ControllerConstructor.getController(requestInfo);
             c.process(requestInfo, out);
         } catch (IOException e) {
