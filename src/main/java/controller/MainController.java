@@ -4,18 +4,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import webserver.RequestHandler;
 
-import java.io.*;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.nio.file.Files;
-import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 public class MainController implements Controller{
     private static final Logger log = LoggerFactory.getLogger(RequestHandler.class);
 
     @Override
     public void process(Map<String, String> requestInfo, OutputStream out) throws IOException {
-        final byte[] body = Files.readAllBytes(new File("./webapp" + requestInfo.get("Path")).toPath());
+        final byte[] body = Files.readAllBytes(new File("./webapp" + "/index.html").toPath());
 
         DataOutputStream dos = new DataOutputStream(out);
         response200Header(dos, body.length);
