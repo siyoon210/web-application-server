@@ -1,7 +1,13 @@
 package util;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import com.google.common.base.Strings;
@@ -105,5 +111,29 @@ public class HttpRequestUtils {
         public String toString() {
             return "Pair [key=" + key + ", value=" + value + "]";
         }
+    }
+
+    public static Map<String, String> getRequestInfoFrom(InputStream in) throws IOException {
+        final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in));
+        Map<String, String> requestInfo = new HashMap<>();
+        String line;
+        while (!"".equals(line = bufferedReader.readLine())) {
+            if (Objects.isNull(line)) {
+                break;
+            }
+
+            if (requestInfo.isEmpty()) {
+                final String[] s = line.split(" ");
+                requestInfo.put("Method", s[0]);
+                requestInfo.put("Path", s[1]);
+                requestInfo.put("Version", s[2]);
+                continue;
+            }
+
+            final int i = line.indexOf(":");
+            requestInfo.put(line.substring(0, i), line.substring(i + 2));
+        }
+
+        return requestInfo;
     }
 }

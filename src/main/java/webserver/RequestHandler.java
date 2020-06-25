@@ -7,9 +7,9 @@ import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.net.Socket;
-import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
+
+import static util.HttpRequestUtils.getRequestInfoFrom;
 
 public class RequestHandler extends Thread {
     private static final Logger log = LoggerFactory.getLogger(RequestHandler.class);
@@ -26,26 +26,7 @@ public class RequestHandler extends Thread {
 
         try (InputStream in = connection.getInputStream();
              OutputStream out = connection.getOutputStream()) {
-            final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in));
-            Map<String, String> requestInfo = new HashMap<>();
-            String line;
-            while (!"".equals(line = bufferedReader.readLine())) {
-                if (Objects.isNull(line)) {
-                    break;
-                }
-
-                if (requestInfo.isEmpty()) {
-                    final String[] s = line.split(" ");
-                    requestInfo.put("Method", s[0]);
-                    requestInfo.put("Path", s[1]);
-                    requestInfo.put("Version", s[2]);
-                    continue;
-                }
-
-                final int i = line.indexOf(":");
-                requestInfo.put(line.substring(0, i), line.substring(i + 2));
-            }
-
+            Map<String, String> requestInfo = getRequestInfoFrom(in);
             log.debug("Method: {}, Path: {}", requestInfo.get("Method"), requestInfo.get("Path"));
 
             Controller c = ControllerConstructor.getController(requestInfo.get("Path"));
