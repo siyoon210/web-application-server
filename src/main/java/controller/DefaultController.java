@@ -13,7 +13,7 @@ import java.util.Map;
 
 class DefaultController implements Controller{
     private static final Controller instance = new DefaultController();
-    private static final Logger log = LoggerFactory.getLogger(RequestHandler.class);
+    private static final Logger log = LoggerFactory.getLogger(DefaultController.class);
 
     private DefaultController() {}
 

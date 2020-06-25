@@ -13,7 +13,7 @@ import java.util.Map;
 
 class MainController implements Controller {
     private static final Controller instance = new MainController();
-    private static final Logger log = LoggerFactory.getLogger(RequestHandler.class);
+    private static final Logger log = LoggerFactory.getLogger(MainController.class);
 
     private MainController() {}
 
