@@ -7,7 +7,6 @@ import java.util.Objects;
 public class ControllerConstructor {
     private final static Map<String, Controller> pathAndControllers = new HashMap<>();
     static {
-        pathAndControllers.put("GET /", MainController.getInstance());
         pathAndControllers.put("GET /user/create", UserGetCreateController.getInstance());
         pathAndControllers.put("POST /user/create", UserPostCreateController.getInstance());
         pathAndControllers.put("POST /user/login", UserLoginController.getInstance());

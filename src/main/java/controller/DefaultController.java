@@ -24,7 +24,11 @@ class DefaultController implements Controller {
 
     @Override
     public void process(Map<String, String> requestInfo, OutputStream out) throws IOException {
-        final String path = requestInfo.get("Path");
+        String path = requestInfo.get("Path");
+        if (path.equals("/")) {
+            path = "/index.html";
+        }
+
         final byte[] body = Files.readAllBytes(new File("./webapp" + path).toPath());
 
         final String fileType = path.substring(path.lastIndexOf(".") + 1);
