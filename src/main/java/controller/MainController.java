@@ -11,7 +11,7 @@ import java.io.OutputStream;
 import java.nio.file.Files;
 import java.util.Map;
 
-public class MainController implements Controller {
+class MainController implements Controller {
     private static final Controller instance = new MainController();
     private static final Logger log = LoggerFactory.getLogger(RequestHandler.class);
 
