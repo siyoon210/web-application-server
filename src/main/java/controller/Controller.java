@@ -1,10 +1,10 @@
 package controller;
 
-import controller.model.Response;
+import controller.model.HttpRequest;
+import controller.model.HttpResponse;
 
 import java.io.IOException;
-import java.util.Map;
 
 public interface Controller {
-    Response process(Map<String, String> requestInfo) throws IOException;
+    HttpResponse process(HttpRequest httpRequest) throws IOException;
 }

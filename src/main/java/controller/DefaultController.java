@@ -1,18 +1,18 @@
 package controller;
 
-import controller.model.Response;
-import controller.model.StaticFileResponse;
+import controller.model.HttpRequest;
+import controller.model.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.Map;
 
 class DefaultController implements Controller {
     private static final Controller instance = new DefaultController();
     private static final Logger log = LoggerFactory.getLogger(DefaultController.class);
+    private static final String STATIC_FILE_PATH = "./webapp";
 
     private DefaultController() {
     }
@@ -22,13 +22,13 @@ class DefaultController implements Controller {
     }
 
     @Override
-    public Response process(Map<String, String> requestInfo) throws IOException {
-        final String path = getPath(requestInfo);
-        final String mediaType = getMediaType(requestInfo);
+    public HttpResponse process(HttpRequest request) throws IOException {
+        final String path = getPath(request);
+        final String mediaType = getMediaType(request);
 
-        final byte[] body = Files.readAllBytes(new File("./webapp" + path).toPath());
+        final byte[] body = Files.readAllBytes(new File(STATIC_FILE_PATH + path).toPath());
 
-        return StaticFileResponse.builder()
+        return HttpResponse.builder()
                 .status(200)
                 .header("Content-Type", mediaType + ";charset=utf-8")
                 .header("Content-Length", body.length)
@@ -36,9 +36,17 @@ class DefaultController implements Controller {
                 .build();
     }
 
-    private String getMediaType(Map<String, String> requestInfo) {
-        final String path = requestInfo.get("Path");
-        final String fileType = path.substring(path.lastIndexOf(".") + 1);
+    private String getPath(HttpRequest request) {
+        final String path = request.get("Path");
+        if (path.equals("/")) {
+            return "/index.html";
+        }
+        return path;
+    }
+
+    private String getMediaType(HttpRequest request) {
+        final String path = request.get("Path");
+        final String fileType = path.substring(path.lastIndexOf('.') + 1);
 
         switch (fileType) {
             case "html":
@@ -57,13 +65,5 @@ class DefaultController implements Controller {
                 log.debug("Can't find proper media-type: {}", fileType);
                 return "unknown";
         }
-    }
-
-    private String getPath(Map<String, String> requestInfo) {
-        String path = requestInfo.get("Path");
-        if (path.equals("/")) {
-            return  "/index.html";
-        }
-        return path;
     }
 }

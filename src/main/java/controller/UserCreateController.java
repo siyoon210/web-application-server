@@ -1,8 +1,8 @@
 package controller;
 
+import controller.model.HttpRequest;
 import db.DataBase;
-import controller.model.RedirectResponse;
-import controller.model.Response;
+import controller.model.HttpResponse;
 import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,14 +22,14 @@ class UserCreateController implements Controller {
     }
 
     @Override
-    public Response process(Map<String, String> requestInfo) {
-        final Map<String, String> content = parseQueryString(requestInfo.get("body"));
-        User newUser = new User(content);
+    public HttpResponse process(HttpRequest request) {
+        final Map<String, String> content = parseQueryString(request.get("body"));
+        final User newUser = new User(content);
 
-        log.info("Create User: {}", newUser.toString());
+        log.info("Create User: {}", newUser);
         DataBase.addUser(newUser);
 
-        return RedirectResponse.builder()
+        return HttpResponse.builder()
                 .status(302)
                 .location("/")
                 .build();

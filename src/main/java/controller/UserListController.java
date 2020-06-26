@@ -1,9 +1,8 @@
 package controller;
 
+import controller.model.HttpRequest;
 import db.DataBase;
-import controller.model.RedirectResponse;
-import controller.model.Response;
-import controller.model.StaticFileResponse;
+import controller.model.HttpResponse;
 import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,10 +23,10 @@ class UserListController implements Controller {
     }
 
     @Override
-    public Response process(Map<String, String> requestInfo) {
+    public HttpResponse process(HttpRequest request) {
         boolean logined = false;
         try {
-            final String cookie = requestInfo.get("Cookie");
+            final String cookie = request.get("Cookie");
             final Map<String, String> cookies = parseCookies(cookie);
             logined = Boolean.parseBoolean(cookies.get("logined"));
         } catch (NullPointerException e) {
@@ -37,14 +36,14 @@ class UserListController implements Controller {
         if (logined) {
             log.info("Login user");
             final Collection<User> all = DataBase.findAll();
-            StringBuilder sb = new StringBuilder();
+            final StringBuilder sb = new StringBuilder();
             for (User user : all) {
                 sb.append(user.getName()).append(": ").append(user.getEmail()).append("<br>");
             }
 
             final byte[] body = sb.toString().getBytes();
 
-            return StaticFileResponse.builder()
+            return HttpResponse.builder()
                     .status(200)
                     .header("Content-Type", "text/html;charset=utf-8")
                     .header("Content-Length", body.length)
@@ -53,7 +52,7 @@ class UserListController implements Controller {
         }
 
         log.info("Logout user");
-        return RedirectResponse.builder()
+        return HttpResponse.builder()
                 .status(302)
                 .location("/user/login.html")
                 .build();

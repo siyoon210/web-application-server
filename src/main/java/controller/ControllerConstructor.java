@@ -1,20 +1,26 @@
 package controller;
 
+import controller.model.HttpRequest;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
 public class ControllerConstructor {
     private final static Map<String, Controller> pathAndControllers = new HashMap<>();
+
+    private ControllerConstructor() {
+    }
+
     static {
         pathAndControllers.put("POST /user/create", UserCreateController.getInstance());
         pathAndControllers.put("POST /user/login", UserLoginController.getInstance());
         pathAndControllers.put("GET /user/list", UserListController.getInstance());
     }
 
-    public static Controller getController(Map<String, String> requestInfo) {
-        String method = requestInfo.get("Method");
-        String path = requestInfo.get("Path");
+    public static Controller getOf(HttpRequest request) {
+        final String method = request.get("Method");
+        String path = request.get("Path");
 
         if (hasQueryString(path)) {
             path = subStringQueryString(path);
@@ -22,11 +28,7 @@ public class ControllerConstructor {
 
         final Controller controller = pathAndControllers.get(method + " " + path);
 
-        if (Objects.isNull(controller)) {
-            return DefaultController.getInstance();
-        }
-
-        return controller;
+        return Objects.isNull(controller) ? DefaultController.getInstance() : controller;
     }
 
     private static String subStringQueryString(String path) {
