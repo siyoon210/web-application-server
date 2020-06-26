@@ -1,5 +1,7 @@
 package controller;
 
+import controller.model.HttpRequest;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -12,9 +14,9 @@ public class ControllerConstructor {
         pathAndControllers.put("GET /user/list", UserListController.getInstance());
     }
 
-    public static Controller getController(Map<String, String> requestInfo) {
-        String method = requestInfo.get("Method");
-        String path = requestInfo.get("Path");
+    public static Controller getOf(HttpRequest request) {
+        final String method = request.get("Method");
+        String path = request.get("Path");
 
         if (hasQueryString(path)) {
             path = subStringQueryString(path);

@@ -1,5 +1,6 @@
 package controller;
 
+import controller.model.HttpRequest;
 import db.DataBase;
 import controller.model.RedirectResponse;
 import controller.model.Response;
@@ -24,10 +25,10 @@ class UserListController implements Controller {
     }
 
     @Override
-    public Response process(Map<String, String> requestInfo) {
+    public Response process(HttpRequest request) {
         boolean logined = false;
         try {
-            final String cookie = requestInfo.get("Cookie");
+            final String cookie = request.get("Cookie");
             final Map<String, String> cookies = parseCookies(cookie);
             logined = Boolean.parseBoolean(cookies.get("logined"));
         } catch (NullPointerException e) {

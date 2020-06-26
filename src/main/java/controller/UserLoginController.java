@@ -1,5 +1,6 @@
 package controller;
 
+import controller.model.HttpRequest;
 import db.DataBase;
 import controller.model.RedirectResponse;
 import controller.model.Response;
@@ -23,8 +24,8 @@ class UserLoginController implements Controller {
     }
 
     @Override
-    public Response process(Map<String, String> requestInfo) {
-        final Map<String, String> content = parseQueryString(requestInfo.get("body"));
+    public Response process(HttpRequest request) {
+        final Map<String, String> content = parseQueryString(request.get("body"));
         final User user = DataBase.findUserById(content.get("userId"));
 
         if (isLoginFailed(content, user)) {

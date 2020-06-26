@@ -2,6 +2,7 @@ package webserver;
 
 import controller.Controller;
 import controller.ControllerConstructor;
+import controller.model.HttpRequest;
 import controller.model.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,9 +11,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
-import java.util.Map;
-
-import static util.HttpRequestUtils.getRequestInfoFrom;
 
 public class RequestHandler extends Thread {
     private static final Logger log = LoggerFactory.getLogger(RequestHandler.class);
@@ -29,9 +27,9 @@ public class RequestHandler extends Thread {
 
         try (InputStream in = connection.getInputStream();
              OutputStream out = connection.getOutputStream()) {
-            final Map<String, String> requestInfo = getRequestInfoFrom(in);
-            final Controller controller = ControllerConstructor.getController(requestInfo);
-            final Response response = controller.process(requestInfo);
+            final HttpRequest httpRequest = HttpRequest.from(in);
+            final Controller controller = ControllerConstructor.getOf(httpRequest);
+            final Response response = controller.process(httpRequest);
             response.write(out);
         } catch (IOException e) {
             log.error(e.getMessage());
