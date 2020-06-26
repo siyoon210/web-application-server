@@ -45,7 +45,7 @@ class DefaultController implements Controller {
 
     private String getMediaType(HttpRequest request) {
         final String path = request.get("Path");
-        final String fileType = path.substring(path.lastIndexOf("\\.") + 1);
+        final String fileType = path.substring(path.lastIndexOf(".") + 1);
 
         switch (fileType) {
             case "html":
