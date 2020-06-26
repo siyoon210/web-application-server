@@ -32,14 +32,14 @@ class UserLoginController implements Controller {
                     .redirect("/user/login_failed.html")
                     .cookie("logined", false)
                     .build();
+        } else {
+            log.debug("Login success: {}", user.getName());
+            return HttpResponse.builder()
+                    .status(302)
+                    .redirect("/")
+                    .cookie("logined", true)
+                    .build();
         }
-
-        log.debug("Login success: {}", user.getName());
-        return HttpResponse.builder()
-                .status(302)
-                .redirect("/")
-                .cookie("logined", true)
-                .build();
     }
 
     private boolean isLoginFailed(Map<String, String> content, User user) {
