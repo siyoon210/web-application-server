@@ -25,24 +25,24 @@ class UserLoginController implements Controller {
         final Map<String, String> content = request.getParsedBody();
         final User user = DataBase.findUserById(content.get("userId"));
 
-        if (isLoginFailed(content, user)) {
-            log.debug("Login fail: {}", user == null ? "[No user]" : user.getName());
-            return HttpResponse.builder()
-                    .status(302)
-                    .redirect("/user/login_failed.html")
-                    .cookie("logined", false)
-                    .build();
-        } else {
+        if (isLoginSuccess(content, user)) {
             log.debug("Login success: {}", user.getName());
             return HttpResponse.builder()
                     .status(302)
                     .redirect("/")
                     .cookie("logined", true)
                     .build();
+        } else {
+            log.debug("Login fail: {}", user == null ? "[No user]" : user.getName());
+            return HttpResponse.builder()
+                    .status(302)
+                    .redirect("/user/login_failed.html")
+                    .cookie("logined", false)
+                    .build();
         }
     }
 
-    private boolean isLoginFailed(Map<String, String> content, User user) {
-        return user == null || !user.getPassword().equals(content.get("password"));
+    private boolean isLoginSuccess(Map<String, String> content, User user) {
+        return user != null && user.getPassword().equals(content.get("password"));
     }
 }
