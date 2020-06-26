@@ -2,9 +2,7 @@ package controller;
 
 import controller.model.HttpRequest;
 import db.DataBase;
-import controller.model.RedirectResponse;
-import controller.model.Response;
-import controller.model.StaticFileResponse;
+import controller.model.HttpResponse;
 import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,7 +23,7 @@ class UserListController implements Controller {
     }
 
     @Override
-    public Response process(HttpRequest request) {
+    public HttpResponse process(HttpRequest request) {
         boolean logined = false;
         try {
             final String cookie = request.get("Cookie");
@@ -45,7 +43,7 @@ class UserListController implements Controller {
 
             final byte[] body = sb.toString().getBytes();
 
-            return StaticFileResponse.builder()
+            return HttpResponse.builder()
                     .status(200)
                     .header("Content-Type", "text/html;charset=utf-8")
                     .header("Content-Length", body.length)
@@ -54,7 +52,7 @@ class UserListController implements Controller {
         }
 
         log.info("Logout user");
-        return RedirectResponse.builder()
+        return HttpResponse.builder()
                 .status(302)
                 .location("/user/login.html")
                 .build();

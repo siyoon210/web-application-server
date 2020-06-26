@@ -1,8 +1,7 @@
 package controller;
 
 import controller.model.HttpRequest;
-import controller.model.Response;
-import controller.model.StaticFileResponse;
+import controller.model.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,12 +21,12 @@ class DefaultController implements Controller {
     }
 
     @Override
-    public Response process(HttpRequest request) throws IOException {
+    public HttpResponse process(HttpRequest request) throws IOException {
         final String path = getPath(request);
         final String mediaType = getMediaType(request);
         final byte[] body = Files.readAllBytes(new File("./webapp" + path).toPath());
 
-        return StaticFileResponse.builder()
+        return HttpResponse.builder()
                 .status(200)
                 .header("Content-Type", mediaType + ";charset=utf-8")
                 .header("Content-Length", body.length)

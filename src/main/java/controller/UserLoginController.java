@@ -2,8 +2,7 @@ package controller;
 
 import controller.model.HttpRequest;
 import db.DataBase;
-import controller.model.RedirectResponse;
-import controller.model.Response;
+import controller.model.HttpResponse;
 import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,13 +23,13 @@ class UserLoginController implements Controller {
     }
 
     @Override
-    public Response process(HttpRequest request) {
+    public HttpResponse process(HttpRequest request) {
         final Map<String, String> content = parseQueryString(request.get("body"));
         final User user = DataBase.findUserById(content.get("userId"));
 
         if (isLoginFailed(content, user)) {
             log.debug("Login fail: {}", user == null ? "[No user]" : user.getName());
-            return RedirectResponse.builder()
+            return HttpResponse.builder()
                     .status(302)
                     .location("/user/login_failed.html")
                     .cookie("logined", false)
@@ -38,7 +37,7 @@ class UserLoginController implements Controller {
         }
 
         log.debug("Login success: {}", user.getName());
-        return RedirectResponse.builder()
+        return HttpResponse.builder()
                 .status(302)
                 .location("/")
                 .cookie("logined", true)

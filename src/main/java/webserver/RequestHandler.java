@@ -3,7 +3,7 @@ package webserver;
 import controller.Controller;
 import controller.ControllerConstructor;
 import controller.model.HttpRequest;
-import controller.model.Response;
+import controller.model.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,7 +29,7 @@ public class RequestHandler extends Thread {
              OutputStream out = connection.getOutputStream()) {
             final HttpRequest httpRequest = HttpRequest.from(in);
             final Controller controller = ControllerConstructor.getOf(httpRequest);
-            final Response response = controller.process(httpRequest);
+            final HttpResponse response = controller.process(httpRequest);
             response.write(out);
         } catch (IOException e) {
             log.error(e.getMessage());

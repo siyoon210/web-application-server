@@ -9,14 +9,16 @@ import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-public class StaticFileResponse implements Response {
-    private static final Logger log = LoggerFactory.getLogger(StaticFileResponse.class);
+import static java.util.stream.Collectors.joining;
+
+public class HttpResponse {
+    private static final Logger log = LoggerFactory.getLogger(HttpResponse.class);
 
     private final int status;
     private final Map<String, String> headers;
     private final byte[] body;
 
-    private StaticFileResponse(int status, Map<String, String> headers, byte[] body) {
+    public HttpResponse(int status, Map<String, String> headers, byte[] body) {
         this.status = status;
         this.headers = headers;
         this.body = body;
@@ -26,7 +28,6 @@ public class StaticFileResponse implements Response {
         return new Builder();
     }
 
-    @Override
     public void write(OutputStream out) {
         DataOutputStream dos = new DataOutputStream(out);
         writeHeader(dos);
@@ -47,7 +48,9 @@ public class StaticFileResponse implements Response {
 
     private void writeBody(DataOutputStream dos) {
         try {
-            dos.write(body, 0, body.length);
+            if (body != null) {
+                dos.write(body, 0, body.length);
+            }
             dos.flush();
         } catch (IOException e) {
             log.error(e.getMessage());
@@ -57,10 +60,12 @@ public class StaticFileResponse implements Response {
     public static class Builder {
         private int status;
         private final Map<String, String> headers;
+        private final Map<String, String> cookies;
         private byte[] body;
 
         public Builder() {
             headers = new HashMap<>();
+            cookies = new HashMap<>();
         }
 
         public Builder status(int status) {
@@ -69,12 +74,22 @@ public class StaticFileResponse implements Response {
         }
 
         public Builder header(String key, String value) {
-            this.headers.put(key, value);
+            headers.put(key, value);
             return this;
         }
 
         public Builder header(String key, int value) {
-            this.headers.put(key, String.valueOf(value));
+            headers.put(key, String.valueOf(value));
+            return this;
+        }
+
+        public Builder cookie(String key, boolean value) {
+            cookies.put(key, String.valueOf(value));
+            return this;
+        }
+
+        public Builder location(String location) {
+            headers.put("Location", location);
             return this;
         }
 
@@ -83,8 +98,22 @@ public class StaticFileResponse implements Response {
             return this;
         }
 
-        public StaticFileResponse build() {
-            return new StaticFileResponse(status, headers, body);
+        public HttpResponse build() {
+            putCookiesOnHeader();
+            return new HttpResponse(status, headers, body);
+        }
+
+        private void putCookiesOnHeader() {
+            if (cookies.isEmpty()) {
+                return;
+            }
+
+            final String cookies = this.cookies.entrySet()
+                    .stream()
+                    .map(e -> e.getKey() + "=" + e.getValue())
+                    .collect(joining(";"));
+
+            headers.put("Set-Cookie", cookies);
         }
     }
 }

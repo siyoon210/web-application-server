@@ -24,11 +24,7 @@ public class ControllerConstructor {
 
         final Controller controller = pathAndControllers.get(method + " " + path);
 
-        if (Objects.isNull(controller)) {
-            return DefaultController.getInstance();
-        }
-
-        return controller;
+        return Objects.isNull(controller) ? DefaultController.getInstance() : controller;
     }
 
     private static String subStringQueryString(String path) {
