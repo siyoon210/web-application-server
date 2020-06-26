@@ -108,12 +108,12 @@ public class HttpResponse {
                 return;
             }
 
-            final String cookies = this.cookies.entrySet()
+            final String joinedCookies = this.cookies.entrySet()
                     .stream()
                     .map(e -> e.getKey() + "=" + e.getValue())
                     .collect(joining(";"));
 
-            headers.put("Set-Cookie", cookies);
+            headers.put("Set-Cookie", joinedCookies);
         }
     }
 }

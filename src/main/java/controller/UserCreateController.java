@@ -24,9 +24,9 @@ class UserCreateController implements Controller {
     @Override
     public HttpResponse process(HttpRequest request) {
         final Map<String, String> content = parseQueryString(request.get("body"));
-        User newUser = new User(content);
+        final User newUser = new User(content);
 
-        log.info("Create User: {}", newUser.toString());
+        log.info("Create User: {}", newUser);
         DataBase.addUser(newUser);
 
         return HttpResponse.builder()

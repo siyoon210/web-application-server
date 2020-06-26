@@ -36,7 +36,7 @@ class UserListController implements Controller {
         if (logined) {
             log.info("Login user");
             final Collection<User> all = DataBase.findAll();
-            StringBuilder sb = new StringBuilder();
+            final StringBuilder sb = new StringBuilder();
             for (User user : all) {
                 sb.append(user.getName()).append(": ").append(user.getEmail()).append("<br>");
             }

@@ -21,6 +21,7 @@ public class RequestHandler extends Thread {
         this.connection = connectionSocket;
     }
 
+    @Override
     public void run() {
         log.debug("New Client Connect! Connected IP : {}, Port : {}", connection.getInetAddress(),
                 connection.getPort());

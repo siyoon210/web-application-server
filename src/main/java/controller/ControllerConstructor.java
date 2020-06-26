@@ -8,6 +8,10 @@ import java.util.Objects;
 
 public class ControllerConstructor {
     private final static Map<String, Controller> pathAndControllers = new HashMap<>();
+
+    private ControllerConstructor() {
+    }
+
     static {
         pathAndControllers.put("POST /user/create", UserCreateController.getInstance());
         pathAndControllers.put("POST /user/login", UserLoginController.getInstance());
