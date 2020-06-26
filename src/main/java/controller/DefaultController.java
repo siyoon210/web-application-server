@@ -12,6 +12,7 @@ import java.nio.file.Files;
 class DefaultController implements Controller {
     private static final Controller instance = new DefaultController();
     private static final Logger log = LoggerFactory.getLogger(DefaultController.class);
+    private static final String STATIC_FILE_PATH = "./webapp";
 
     private DefaultController() {
     }
@@ -24,7 +25,8 @@ class DefaultController implements Controller {
     public HttpResponse process(HttpRequest request) throws IOException {
         final String path = getPath(request);
         final String mediaType = getMediaType(request);
-        final byte[] body = Files.readAllBytes(new File("./webapp" + path).toPath());
+
+        final byte[] body = Files.readAllBytes(new File(STATIC_FILE_PATH + path).toPath());
 
         return HttpResponse.builder()
                 .status(200)
