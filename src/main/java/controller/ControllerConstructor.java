@@ -19,15 +19,13 @@ public class ControllerConstructor {
     }
 
     public static Controller getOf(HttpRequest request) {
-        final String method = request.get("Method");
-        String path = request.get("Path");
-
+        final String method = request.getMethod();
+        String path = request.getPath();
         if (hasQueryString(path)) {
             path = subStringQueryString(path);
         }
 
         final Controller controller = pathAndControllers.get(method + " " + path);
-
         return Objects.isNull(controller) ? DefaultController.getInstance() : controller;
     }
 

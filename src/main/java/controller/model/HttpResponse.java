@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import static java.util.stream.Collectors.joining;
 
@@ -48,7 +49,7 @@ public class HttpResponse {
 
     private void writeBody(DataOutputStream dos) {
         try {
-            if (body != null) {
+            if (Objects.nonNull(body)) {
                 dos.write(body, 0, body.length);
             }
             dos.flush();
@@ -88,7 +89,7 @@ public class HttpResponse {
             return this;
         }
 
-        public Builder location(String location) {
+        public Builder redirect(String location) {
             headers.put("Location", location);
             return this;
         }

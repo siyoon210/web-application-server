@@ -11,18 +11,15 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-import static util.HttpRequestUtils.parseHeader;
+import static util.HttpRequestUtils.*;
 
 public class HttpRequest {
     private final Map<String, String> requestInfo;
 
     private HttpRequest(InputStream in) throws IOException {
         requestInfo = new HashMap<>();
-
         final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in));
-
         int contentLength = parseHeaders(bufferedReader);
-
         if (contentLength > 0) {
             parseBody(bufferedReader, contentLength);
         }
@@ -41,10 +38,7 @@ public class HttpRequest {
             }
 
             if (requestInfo.isEmpty()) {
-                final String[] s = line.split(" ");
-                requestInfo.put("Method", s[0]);
-                requestInfo.put("Path", s[1]);
-                requestInfo.put("Version", s[2]);
+                parseHttpMethodAndPath(line);
                 continue;
             }
 
@@ -53,12 +47,20 @@ public class HttpRequest {
                 continue;
             }
 
+            requestInfo.put(pair.getKey(), pair.getValue());
+
             if (pair.getKey().equals("Content-Length")) {
                 contentLength = Integer.parseInt(pair.getValue());
             }
-            requestInfo.put(pair.getKey(), pair.getValue());
         }
         return contentLength;
+    }
+
+    private void parseHttpMethodAndPath(String line) {
+        final String[] s = line.split(" ");
+        requestInfo.put("Method", s[0]);
+        requestInfo.put("Path", s[1]);
+        requestInfo.put("Version", s[2]);
     }
 
     private void parseBody(BufferedReader bufferedReader, int contentLength) throws IOException {
@@ -68,5 +70,21 @@ public class HttpRequest {
 
     public String get(String key) {
         return requestInfo.get(key);
+    }
+
+    public String getPath() {
+        return requestInfo.get("Path");
+    }
+
+    public String getMethod() {
+        return requestInfo.get("Method");
+    }
+
+    public Map<String, String> getCookies() {
+        return parseCookies(requestInfo.get("Cookie"));
+    }
+
+    public Map<String, String> getParsedBody() {
+        return parseQueryString(requestInfo.get("body"));
     }
 }

@@ -24,28 +24,25 @@ class DefaultController implements Controller {
     @Override
     public HttpResponse process(HttpRequest request) throws IOException {
         final String path = getPath(request);
-        final String mediaType = getMediaType(request);
-
         final byte[] body = Files.readAllBytes(new File(STATIC_FILE_PATH + path).toPath());
 
         return HttpResponse.builder()
                 .status(200)
-                .header("Content-Type", mediaType + ";charset=utf-8")
+                .header("Content-Type", getMediaType(path) + ";charset=utf-8")
                 .header("Content-Length", body.length)
                 .body(body)
                 .build();
     }
 
     private String getPath(HttpRequest request) {
-        final String path = request.get("Path");
+        final String path = request.getPath();
         if (path.equals("/")) {
             return "/index.html";
         }
         return path;
     }
 
-    private String getMediaType(HttpRequest request) {
-        final String path = request.get("Path");
+    private String getMediaType(String path) {
         final String fileType = path.substring(path.lastIndexOf('.') + 1);
 
         switch (fileType) {

@@ -9,8 +9,6 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 
-import static util.HttpRequestUtils.parseQueryString;
-
 class UserLoginController implements Controller {
     private static final Controller instance = new UserLoginController();
     private static final Logger log = LoggerFactory.getLogger(UserLoginController.class);
@@ -24,27 +22,27 @@ class UserLoginController implements Controller {
 
     @Override
     public HttpResponse process(HttpRequest request) {
-        final Map<String, String> content = parseQueryString(request.get("body"));
+        final Map<String, String> content = request.getParsedBody();
         final User user = DataBase.findUserById(content.get("userId"));
 
-        if (isLoginFailed(content, user)) {
+        if (isLoginSuccess(content, user)) {
+            log.debug("Login success: {}", user.getName());
+            return HttpResponse.builder()
+                    .status(302)
+                    .redirect("/")
+                    .cookie("logined", true)
+                    .build();
+        } else {
             log.debug("Login fail: {}", user == null ? "[No user]" : user.getName());
             return HttpResponse.builder()
                     .status(302)
-                    .location("/user/login_failed.html")
+                    .redirect("/user/login_failed.html")
                     .cookie("logined", false)
                     .build();
         }
-
-        log.debug("Login success: {}", user.getName());
-        return HttpResponse.builder()
-                .status(302)
-                .location("/")
-                .cookie("logined", true)
-                .build();
     }
 
-    private boolean isLoginFailed(Map<String, String> content, User user) {
-        return user == null || !user.getPassword().equals(content.get("password"));
+    private boolean isLoginSuccess(Map<String, String> content, User user) {
+        return user != null && user.getPassword().equals(content.get("password"));
     }
 }
