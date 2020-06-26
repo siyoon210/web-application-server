@@ -31,7 +31,7 @@ class UserLoginController implements Controller {
             log.debug("Login fail: {}", user == null ? "[No user]" : user.getName());
             return HttpResponse.builder()
                     .status(302)
-                    .location("/user/login_failed.html")
+                    .redirect("/user/login_failed.html")
                     .cookie("logined", false)
                     .build();
         }
@@ -39,7 +39,7 @@ class UserLoginController implements Controller {
         log.debug("Login success: {}", user.getName());
         return HttpResponse.builder()
                 .status(302)
-                .location("/")
+                .redirect("/")
                 .cookie("logined", true)
                 .build();
     }

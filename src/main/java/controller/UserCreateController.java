@@ -31,7 +31,7 @@ class UserCreateController implements Controller {
 
         return HttpResponse.builder()
                 .status(302)
-                .location("/")
+                .redirect("/")
                 .build();
     }
 }

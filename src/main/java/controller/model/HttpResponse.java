@@ -88,7 +88,7 @@ public class HttpResponse {
             return this;
         }
 
-        public Builder location(String location) {
+        public Builder redirect(String location) {
             headers.put("Location", location);
             return this;
         }

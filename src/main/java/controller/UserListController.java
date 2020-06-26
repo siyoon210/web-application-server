@@ -54,7 +54,7 @@ class UserListController implements Controller {
         log.info("Logout user");
         return HttpResponse.builder()
                 .status(302)
-                .location("/user/login.html")
+                .redirect("/user/login.html")
                 .build();
     }
 }
