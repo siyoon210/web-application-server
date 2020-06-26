@@ -30,8 +30,8 @@ public class RequestHandler extends Thread {
              OutputStream out = connection.getOutputStream()) {
             final HttpRequest httpRequest = HttpRequest.from(in);
             final Controller controller = ControllerConstructor.getOf(httpRequest);
-            final HttpResponse response = controller.process(httpRequest);
-            response.write(out);
+            final HttpResponse httpResponse = controller.process(httpRequest);
+            httpResponse.write(out);
         } catch (IOException e) {
             log.error(e.getMessage());
         }
