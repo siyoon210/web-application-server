@@ -24,23 +24,11 @@ class UserListController implements Controller {
 
     @Override
     public HttpResponse process(HttpRequest request) {
-        boolean logined = false;
-        try {
-            final Map<String, String> cookies = request.getCookies();
-            logined = Boolean.parseBoolean(cookies.get("logined"));
-        } catch (NullPointerException e) {
-            log.info("invalid cookie");
-        }
+        boolean logined = isLogined(request);
 
         if (logined) {
             log.info("Login user");
-            final Collection<User> all = DataBase.findAll();
-            final StringBuilder sb = new StringBuilder();
-            for (User user : all) {
-                sb.append(user.getName()).append(": ").append(user.getEmail()).append("<br>");
-            }
-
-            final byte[] body = sb.toString().getBytes();
+            final byte[] body = getUserListAsBytes();
 
             return HttpResponse.builder()
                     .status(200)
@@ -55,5 +43,24 @@ class UserListController implements Controller {
                 .status(302)
                 .redirect("/user/login.html")
                 .build();
+    }
+
+    private boolean isLogined(HttpRequest request) {
+        try {
+            final Map<String, String> cookies = request.getCookies();
+            return Boolean.parseBoolean(cookies.get("logined"));
+        } catch (NullPointerException e) {
+            log.info("invalid cookie");
+            return false;
+        }
+    }
+
+    private byte[] getUserListAsBytes() {
+        final Collection<User> all = DataBase.findAll();
+        final StringBuilder sb = new StringBuilder();
+        for (User user : all) {
+            sb.append(user.getName()).append(": ").append(user.getEmail()).append("<br>");
+        }
+        return sb.toString().getBytes();
     }
 }
