@@ -23,7 +23,7 @@ class UserCreateController implements Controller {
 
     @Override
     public HttpResponse process(HttpRequest request) {
-        final Map<String, String> content = parseQueryString(request.get("body"));
+        final Map<String, String> content = request.getParsedBody();
         final User newUser = new User(content);
 
         log.info("Create User: {}", newUser);

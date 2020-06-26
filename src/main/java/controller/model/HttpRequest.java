@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-import static util.HttpRequestUtils.parseHeader;
+import static util.HttpRequestUtils.*;
 
 public class HttpRequest {
     private final Map<String, String> requestInfo;
@@ -68,5 +68,21 @@ public class HttpRequest {
 
     public String get(String key) {
         return requestInfo.get(key);
+    }
+
+    public String getPath() {
+        return requestInfo.get("Path");
+    }
+
+    public String getMethod() {
+        return requestInfo.get("Method");
+    }
+
+    public Map<String, String> getCookies() {
+        return parseCookies(requestInfo.get("Cookie"));
+    }
+
+    public Map<String, String> getParsedBody() {
+        return parseQueryString(requestInfo.get("body"));
     }
 }

@@ -26,8 +26,7 @@ class UserListController implements Controller {
     public HttpResponse process(HttpRequest request) {
         boolean logined = false;
         try {
-            final String cookie = request.get("Cookie");
-            final Map<String, String> cookies = parseCookies(cookie);
+            final Map<String, String> cookies = request.getCookies();
             logined = Boolean.parseBoolean(cookies.get("logined"));
         } catch (NullPointerException e) {
             log.info("invalid cookie");
