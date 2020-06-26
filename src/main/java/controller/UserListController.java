@@ -29,20 +29,19 @@ class UserListController implements Controller {
         if (logined) {
             log.info("Login user");
             final byte[] body = getUserListAsBytes();
-
             return HttpResponse.builder()
                     .status(200)
                     .header("Content-Type", "text/html;charset=utf-8")
                     .header("Content-Length", body.length)
                     .body(body)
                     .build();
+        } else {
+            log.info("Logout user");
+            return HttpResponse.builder()
+                    .status(302)
+                    .redirect("/user/login.html")
+                    .build();
         }
-
-        log.info("Logout user");
-        return HttpResponse.builder()
-                .status(302)
-                .redirect("/user/login.html")
-                .build();
     }
 
     private boolean isLogined(HttpRequest request) {
