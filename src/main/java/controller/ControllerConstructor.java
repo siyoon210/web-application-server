@@ -13,9 +13,9 @@ public class ControllerConstructor {
     }
 
     static {
-        pathAndControllers.put("POST /user/create", UserCreateController.getInstance());
-        pathAndControllers.put("POST /user/login", UserLoginController.getInstance());
-        pathAndControllers.put("GET /user/list", UserListController.getInstance());
+        pathAndControllers.put("/user/create", UserCreateController.getInstance());
+        pathAndControllers.put("/user/login", UserLoginController.getInstance());
+        pathAndControllers.put("/user/list", UserListController.getInstance());
     }
 
     public static Controller getOf(HttpRequest request) {
@@ -25,7 +25,7 @@ public class ControllerConstructor {
             path = subStringQueryString(path);
         }
 
-        final Controller controller = pathAndControllers.get(method + " " + path);
+        final Controller controller = pathAndControllers.get(path);
         return Objects.isNull(controller) ? DefaultController.getInstance() : controller;
     }
 

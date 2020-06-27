@@ -6,5 +6,5 @@ import controller.model.HttpResponse;
 import java.io.IOException;
 
 public interface Controller {
-    HttpResponse process(HttpRequest httpRequest) throws IOException;
+    HttpResponse process(HttpRequest httpRequest) throws IOException, IllegalAccessException;
 }

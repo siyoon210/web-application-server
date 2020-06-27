@@ -12,7 +12,7 @@ import java.util.Map;
 
 import static util.HttpRequestUtils.parseCookies;
 
-class UserListController implements Controller {
+class UserListController extends AbstractController {
     private static final Controller instance = new UserListController();
     private static final Logger log = LoggerFactory.getLogger(UserListController.class);
 
@@ -23,7 +23,7 @@ class UserListController implements Controller {
     }
 
     @Override
-    public HttpResponse process(HttpRequest request) {
+    protected HttpResponse doGet(HttpRequest request) {
         boolean logined = isLogined(request);
 
         if (logined) {

@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 
-class UserLoginController implements Controller {
+class UserLoginController extends AbstractController {
     private static final Controller instance = new UserLoginController();
     private static final Logger log = LoggerFactory.getLogger(UserLoginController.class);
 
@@ -21,7 +21,7 @@ class UserLoginController implements Controller {
     }
 
     @Override
-    public HttpResponse process(HttpRequest request) {
+    protected HttpResponse doPost(HttpRequest request) {
         final Map<String, String> content = request.getParsedBody();
         final User user = DataBase.findUserById(content.get("userId"));
 

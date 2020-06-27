@@ -11,7 +11,7 @@ import java.util.Map;
 
 import static util.HttpRequestUtils.parseQueryString;
 
-class UserCreateController implements Controller {
+class UserCreateController extends AbstractController {
     private static final Controller instance = new UserCreateController();
     private static final Logger log = LoggerFactory.getLogger(UserCreateController.class);
 
@@ -22,7 +22,7 @@ class UserCreateController implements Controller {
     }
 
     @Override
-    public HttpResponse process(HttpRequest request) {
+    protected HttpResponse doPost(HttpRequest request) {
         final Map<String, String> content = request.getParsedBody();
         final User newUser = new User(content);
 
