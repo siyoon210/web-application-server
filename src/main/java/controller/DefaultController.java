@@ -9,7 +9,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 
-class DefaultController implements Controller {
+class DefaultController extends AbstractController {
     private static final Controller instance = new DefaultController();
     private static final Logger log = LoggerFactory.getLogger(DefaultController.class);
     private static final String STATIC_FILE_PATH = "./webapp";
@@ -22,7 +22,7 @@ class DefaultController implements Controller {
     }
 
     @Override
-    public HttpResponse process(HttpRequest request) throws IOException {
+    protected HttpResponse doGet(HttpRequest request) throws IOException {
         final String path = getPath(request);
         final byte[] body = Files.readAllBytes(new File(STATIC_FILE_PATH + path).toPath());
 
