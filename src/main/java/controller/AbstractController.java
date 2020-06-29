@@ -2,17 +2,18 @@ package controller;
 
 import controller.model.HttpRequest;
 import controller.model.HttpResponse;
+import model.HttpMethod;
 
 import java.io.IOException;
 
 public abstract class AbstractController implements Controller {
     public final HttpResponse process(HttpRequest httpRequest) throws IOException, IllegalAccessException {
-        final String method = httpRequest.getMethod();
+        final HttpMethod method = HttpMethod.valueOf(httpRequest.getMethod());
 
         switch (method) {
-            case "GET":
+            case GET:
                 return doGet(httpRequest);
-            case "POST":
+            case POST:
                 return doPost(httpRequest);
             default:
                 throw new IllegalArgumentException("Illegal Http Method");
