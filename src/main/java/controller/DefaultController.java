@@ -44,23 +44,6 @@ class DefaultController extends AbstractController {
 
     private String getMediaType(String path) {
         final String fileType = path.substring(path.lastIndexOf('.') + 1);
-
-        switch (fileType) {
-            case "html":
-                return "text/html";
-            case "css":
-                return "text/css";
-            case "js":
-                return "text/javascript";
-            case "png":
-                return "image/png";
-            case "ico":
-                return "image/ico";
-            case "woff":
-                return "font/woff";
-            default:
-                log.debug("Can't find proper media-type: {}", fileType);
-                return "unknown";
-        }
+        return getMediaType(fileType);
     }
 }
