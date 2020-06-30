@@ -32,7 +32,7 @@ public class RequestHandler extends Thread {
             final Controller controller = ControllerConstructor.getOf(httpRequest);
             final HttpResponse httpResponse = controller.process(httpRequest);
             httpResponse.write(out);
-        } catch (IOException e) {
+        } catch (IOException | IllegalAccessException e) {
             log.error(e.getMessage());
         }
     }
