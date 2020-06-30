@@ -11,8 +11,6 @@ import java.nio.file.Files;
 
 class DefaultController extends AbstractController {
     private static final Controller instance = new DefaultController();
-    private static final Logger log = LoggerFactory.getLogger(DefaultController.class);
-    private static final String STATIC_FILE_PATH = "./webapp";
 
     private DefaultController() {
     }
@@ -24,13 +22,10 @@ class DefaultController extends AbstractController {
     @Override
     protected HttpResponse doGet(HttpRequest request) throws IOException {
         final String path = getPath(request);
-        final byte[] body = Files.readAllBytes(new File(STATIC_FILE_PATH + path).toPath());
 
         return HttpResponse.builder()
                 .status(200)
-                .header("Content-Type", getMediaType(path) + ";charset=utf-8")
-                .header("Content-Length", body.length)
-                .body(body)
+                .forward(path)
                 .build();
     }
 
@@ -40,10 +35,5 @@ class DefaultController extends AbstractController {
             return "/index.html";
         }
         return path;
-    }
-
-    private String getMediaType(String path) {
-        final String fileType = path.substring(path.lastIndexOf('.') + 1);
-        return getMediaType(fileType);
     }
 }

@@ -7,6 +7,7 @@ import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Map;
 
@@ -23,7 +24,7 @@ class UserListController extends AbstractController {
     }
 
     @Override
-    protected HttpResponse doGet(HttpRequest request) {
+    protected HttpResponse doGet(HttpRequest request) throws IOException {
         boolean logined = isLogined(request);
 
         if (logined) {
