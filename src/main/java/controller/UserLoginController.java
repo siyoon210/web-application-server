@@ -7,6 +7,7 @@ import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.util.Map;
 
 class UserLoginController extends AbstractController {
@@ -21,7 +22,7 @@ class UserLoginController extends AbstractController {
     }
 
     @Override
-    protected HttpResponse doPost(HttpRequest request) {
+    protected HttpResponse doPost(HttpRequest request) throws IOException {
         final Map<String, String> content = request.getParsedBody();
         final User user = DataBase.findUserById(content.get("userId"));
 
