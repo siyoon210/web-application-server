@@ -87,4 +87,11 @@ public class HttpRequest {
     public Map<String, String> getParsedBody() {
         return parseQueryString(requestInfo.get("body"));
     }
+
+    @Override
+    public String toString() {
+        return "HttpRequest{" +
+                "requestInfo=" + requestInfo +
+                '}';
+    }
 }
