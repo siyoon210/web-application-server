@@ -26,6 +26,7 @@ public class HttpRequestTest {
                 + "Content-Length: 46\n"
                 + "Content-Type: application/x-www-form-urlencoded\n"
                 + "Accept: */*\n"
+                + "Cookie: isLogined=false;cookie2=value2\n"
                 + "\n"
                 + "userId=puru&password=1234&name=siyoon";
 
@@ -50,6 +51,15 @@ public class HttpRequestTest {
         assertThat(httpRequest.get("Content-Length")).isEqualTo("46");
         assertThat(httpRequest.get("Content-Type")).isEqualTo("application/x-www-form-urlencoded");
         assertThat(httpRequest.get("Accept")).isEqualTo("*/*");
+    }
+
+    @Test
+    @DisplayName("HTTP요청에서 쿠키정보를 파싱한다.")
+    public void getHttpCookieInfosFromRequest() throws Exception {
+        final Map<String, String> cookies = httpRequest.getCookies();
+        assertThat(cookies).isNotNull();
+        assertThat(cookies.get("isLogined")).isEqualTo("false");
+        assertThat(cookies.get("cookie2")).isEqualTo("value2");
     }
 
     @Test
