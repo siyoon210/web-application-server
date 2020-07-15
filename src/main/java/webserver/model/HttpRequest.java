@@ -89,6 +89,14 @@ public class HttpRequest {
         return httpCookie;
     }
 
+    public HttpSession getSession() {
+        final String jsessionid = httpCookie.get("JSESSIONID");
+        if (jsessionid == null) {
+            return null;
+        }
+        return HttpSessions.get(jsessionid);
+    }
+
     public Map<String, String> getParsedBody() {
         return parseQueryString(requestInfo.get("body"));
     }
