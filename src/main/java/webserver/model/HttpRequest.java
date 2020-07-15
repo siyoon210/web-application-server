@@ -1,4 +1,4 @@
-package controller.model;
+package webserver.model;
 
 import util.HttpRequestUtils;
 import util.IOUtils;

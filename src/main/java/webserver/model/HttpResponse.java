@@ -1,4 +1,4 @@
-package controller.model;
+package webserver.model;
 
 import model.MediaType;
 import org.slf4j.Logger;

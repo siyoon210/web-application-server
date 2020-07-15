@@ -1,8 +1,8 @@
 package controller;
 
-import controller.model.HttpRequest;
+import webserver.model.HttpRequest;
 import db.DataBase;
-import controller.model.HttpResponse;
+import webserver.model.HttpResponse;
 import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,8 +10,6 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Map;
-
-import static util.HttpRequestUtils.parseCookies;
 
 class UserListController extends AbstractController {
     private static final Controller instance = new UserListController();
