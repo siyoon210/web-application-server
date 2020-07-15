@@ -11,7 +11,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-import static util.HttpRequestUtils.*;
+import static util.HttpRequestUtils.parseHeader;
+import static util.HttpRequestUtils.parseQueryString;
 
 public class HttpRequest {
     private final Map<String, String> requestInfo;
@@ -90,7 +91,8 @@ public class HttpRequest {
     }
 
     public HttpSession getSession() {
-        final String jsessionid = httpCookie.get(HttpSession.SESSION_ID_KEY);
+        final HttpCookie cookies = getCookies();
+        final String jsessionid = cookies.get(HttpSession.SESSION_ID_KEY);
         if (Objects.isNull(jsessionid)) {
             throw new IllegalStateException("Session ID dose not exist.");
         }
