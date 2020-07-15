@@ -1,11 +1,12 @@
 package controller;
 
-import webserver.model.HttpRequest;
 import db.DataBase;
-import webserver.model.HttpResponse;
 import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import webserver.model.HttpRequest;
+import webserver.model.HttpResponse;
+import webserver.model.HttpSession;
 
 import java.io.IOException;
 import java.util.Map;
@@ -24,10 +25,12 @@ class UserLoginController extends AbstractController {
     @Override
     protected HttpResponse doPost(HttpRequest request) throws IOException {
         final Map<String, String> content = request.getParsedBody();
+        final HttpSession session = request.getSession();
         final User user = DataBase.findUserById(content.get("userId"));
 
         if (isLoginSuccess(content, user)) {
             log.debug("Login success: {}", user.getName());
+            session.set("user", user);
             return HttpResponse.builder()
                     .status(302)
                     .redirect("/")
