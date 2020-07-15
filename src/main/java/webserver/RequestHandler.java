@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.util.Map;
+import java.util.UUID;
 
 public class RequestHandler extends Thread {
     private static final Logger log = LoggerFactory.getLogger(RequestHandler.class);
@@ -31,6 +33,12 @@ public class RequestHandler extends Thread {
             final HttpRequest httpRequest = HttpRequest.from(in);
             final Controller controller = ControllerConstructor.getOf(httpRequest);
             final HttpResponse httpResponse = controller.process(httpRequest);
+
+            final Map<String, String> cookies = httpRequest.getCookies();
+            if (cookies == null || cookies.get("JSESSIONID") == null) {
+                httpResponse.addCookie("JSESSIONID", UUID.randomUUID());
+            }
+
             httpResponse.write(out);
         } catch (IOException | IllegalAccessException e) {
             log.error(e.getMessage());

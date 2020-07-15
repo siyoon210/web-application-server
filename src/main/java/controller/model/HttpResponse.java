@@ -12,6 +12,7 @@ import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.UUID;
 
 import static java.util.stream.Collectors.joining;
 
@@ -31,6 +32,12 @@ public class HttpResponse {
 
     public static Builder builder() {
         return new Builder();
+    }
+
+    public HttpResponse addCookie(String key, UUID uuid) {
+        final String cookieAsString = key + "=" + uuid;
+        headers.merge("Set-Cookie", cookieAsString, (existedValue, newValue) -> existedValue + ";" + cookieAsString);
+        return this;
     }
 
     public void write(OutputStream out) {
