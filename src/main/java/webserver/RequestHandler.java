@@ -36,7 +36,7 @@ public class RequestHandler extends Thread {
             final HttpResponse httpResponse = controller.process(httpRequest);
 
             final HttpCookie cookies = httpRequest.getCookies();
-            if (cookies == null || cookies.get("JSESSIONID") == null) {
+            if (cookies.get("JSESSIONID") == null) {
                 httpResponse.addCookie("JSESSIONID", UUID.randomUUID());
             }
 
