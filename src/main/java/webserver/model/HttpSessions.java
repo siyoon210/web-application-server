@@ -3,7 +3,6 @@ package webserver.model;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-import java.util.UUID;
 
 public class HttpSessions {
     private static final Map<String, HttpSession> sessions = new HashMap<>();
@@ -12,13 +11,12 @@ public class HttpSessions {
         sessions.put(key, session);
     }
 
-    public static HttpSession get(String key) {
-        HttpSession httpSession = sessions.get(key);
+    public static HttpSession get(String sessionId) {
+        HttpSession httpSession = sessions.get(sessionId);
 
         if (Objects.isNull(httpSession)) {
-            final String id = UUID.randomUUID().toString();
-            httpSession = new HttpSession(id);
-            set(id, httpSession);
+            httpSession = new HttpSession(sessionId);
+            set(sessionId, httpSession);
         }
 
         return httpSession;
