@@ -1,5 +1,6 @@
 package controller;
 
+import webserver.model.HttpCookie;
 import webserver.model.HttpRequest;
 import db.DataBase;
 import webserver.model.HttpResponse;
@@ -45,7 +46,7 @@ class UserListController extends AbstractController {
 
     private boolean isLogined(HttpRequest request) {
         try {
-            final Map<String, String> cookies = request.getCookies();
+            final HttpCookie cookies = request.getCookies();
             return Boolean.parseBoolean(cookies.get("logined"));
         } catch (NullPointerException e) {
             log.info("invalid cookie");

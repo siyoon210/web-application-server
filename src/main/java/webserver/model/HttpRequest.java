@@ -80,8 +80,8 @@ public class HttpRequest {
         return requestInfo.get("Method");
     }
 
-    public Map<String, String> getCookies() {
-        return parseCookies(requestInfo.get("Cookie"));
+    public HttpCookie getCookies() {
+        return new HttpCookie(requestInfo.get("Cookie"));
     }
 
     public Map<String, String> getParsedBody() {

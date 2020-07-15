@@ -1,5 +1,6 @@
 package webserver;
 
+import webserver.model.HttpCookie;
 import webserver.model.HttpRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -55,7 +56,7 @@ public class HttpRequestTest {
     @Test
     @DisplayName("HTTP요청에서 쿠키정보를 파싱한다.")
     public void getHttpCookieInfosFromRequest() {
-        final Map<String, String> cookies = httpRequest.getCookies();
+        final HttpCookie cookies = httpRequest.getCookies();
         assertThat(cookies).isNotNull();
         assertThat(cookies.get("isLogined")).isEqualTo("false");
         assertThat(cookies.get("cookie2")).isEqualTo("value2");

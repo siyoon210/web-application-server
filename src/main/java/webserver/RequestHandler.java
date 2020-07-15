@@ -2,6 +2,7 @@ package webserver;
 
 import controller.Controller;
 import controller.ControllerConstructor;
+import webserver.model.HttpCookie;
 import webserver.model.HttpRequest;
 import webserver.model.HttpResponse;
 import org.slf4j.Logger;
@@ -34,7 +35,7 @@ public class RequestHandler extends Thread {
             final Controller controller = ControllerConstructor.getOf(httpRequest);
             final HttpResponse httpResponse = controller.process(httpRequest);
 
-            final Map<String, String> cookies = httpRequest.getCookies();
+            final HttpCookie cookies = httpRequest.getCookies();
             if (cookies == null || cookies.get("JSESSIONID") == null) {
                 httpResponse.addCookie("JSESSIONID", UUID.randomUUID());
             }
