@@ -15,6 +15,7 @@ import static util.HttpRequestUtils.*;
 
 public class HttpRequest {
     private final Map<String, String> requestInfo;
+    private HttpCookie httpCookie;
 
     private HttpRequest(InputStream in) throws IOException {
         requestInfo = new HashMap<>();
@@ -81,7 +82,11 @@ public class HttpRequest {
     }
 
     public HttpCookie getCookies() {
-        return new HttpCookie(requestInfo.get("Cookie"));
+        if (Objects.isNull(httpCookie)) {
+            httpCookie = new HttpCookie(requestInfo.get("Cookie"));
+        }
+
+        return httpCookie;
     }
 
     public Map<String, String> getParsedBody() {
