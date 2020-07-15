@@ -1,17 +1,15 @@
 package controller;
 
-import controller.model.HttpRequest;
 import db.DataBase;
-import controller.model.HttpResponse;
 import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import webserver.model.HttpRequest;
+import webserver.model.HttpResponse;
+import webserver.model.HttpSession;
 
 import java.io.IOException;
 import java.util.Collection;
-import java.util.Map;
-
-import static util.HttpRequestUtils.parseCookies;
 
 class UserListController extends AbstractController {
     private static final Controller instance = new UserListController();
@@ -25,9 +23,7 @@ class UserListController extends AbstractController {
 
     @Override
     protected HttpResponse doGet(HttpRequest request) throws IOException {
-        boolean logined = isLogined(request);
-
-        if (logined) {
+        if (isLogined(request)) {
             log.info("Login user");
             final byte[] body = getUserListAsBytes();
             return HttpResponse.builder()
@@ -46,13 +42,9 @@ class UserListController extends AbstractController {
     }
 
     private boolean isLogined(HttpRequest request) {
-        try {
-            final Map<String, String> cookies = request.getCookies();
-            return Boolean.parseBoolean(cookies.get("logined"));
-        } catch (NullPointerException e) {
-            log.info("invalid cookie");
-            return false;
-        }
+        final HttpSession session = request.getSession();
+        final Object user = session.get("user");
+        return user != null;
     }
 
     private byte[] getUserListAsBytes() {

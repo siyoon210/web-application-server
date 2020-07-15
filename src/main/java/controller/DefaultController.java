@@ -1,13 +1,9 @@
 package controller;
 
-import controller.model.HttpRequest;
-import controller.model.HttpResponse;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import webserver.model.HttpRequest;
+import webserver.model.HttpResponse;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 
 class DefaultController extends AbstractController {
     private static final Controller instance = new DefaultController();

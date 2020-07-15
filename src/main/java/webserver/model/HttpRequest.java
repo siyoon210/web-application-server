@@ -1,4 +1,4 @@
-package controller.model;
+package webserver.model;
 
 import util.HttpRequestUtils;
 import util.IOUtils;
@@ -11,10 +11,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-import static util.HttpRequestUtils.*;
+import static util.HttpRequestUtils.parseHeader;
+import static util.HttpRequestUtils.parseQueryString;
 
 public class HttpRequest {
     private final Map<String, String> requestInfo;
+    private HttpCookie httpCookie;
 
     private HttpRequest(InputStream in) throws IOException {
         requestInfo = new HashMap<>();
@@ -80,8 +82,21 @@ public class HttpRequest {
         return requestInfo.get("Method");
     }
 
-    public Map<String, String> getCookies() {
-        return parseCookies(requestInfo.get("Cookie"));
+    public HttpCookie getCookies() {
+        if (Objects.isNull(httpCookie)) {
+            httpCookie = new HttpCookie(requestInfo.get("Cookie"));
+        }
+
+        return httpCookie;
+    }
+
+    public HttpSession getSession() {
+        final HttpCookie cookies = getCookies();
+        final String jsessionid = cookies.get(HttpSession.SESSION_ID_KEY);
+        if (Objects.isNull(jsessionid)) {
+            throw new IllegalStateException("Session ID dose not exist.");
+        }
+        return HttpSessions.get(jsessionid);
     }
 
     public Map<String, String> getParsedBody() {

@@ -1,15 +1,13 @@
 package controller;
 
-import controller.model.HttpRequest;
+import webserver.model.HttpRequest;
 import db.DataBase;
-import controller.model.HttpResponse;
+import webserver.model.HttpResponse;
 import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Map;
-
-import static util.HttpRequestUtils.parseQueryString;
 
 class UserCreateController extends AbstractController {
     private static final Controller instance = new UserCreateController();

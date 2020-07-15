@@ -1,6 +1,6 @@
 package controller;
 
-import controller.model.HttpRequest;
+import webserver.model.HttpRequest;
 
 import java.util.HashMap;
 import java.util.Map;
