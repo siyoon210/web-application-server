@@ -90,9 +90,9 @@ public class HttpRequest {
     }
 
     public HttpSession getSession() {
-        final String jsessionid = httpCookie.get("JSESSIONID");
-        if (jsessionid == null) {
-            return null;
+        final String jsessionid = httpCookie.get(HttpSession.SESSION_ID_KEY);
+        if (Objects.isNull(jsessionid)) {
+            throw new IllegalStateException("Session ID dose not exist.");
         }
         return HttpSessions.get(jsessionid);
     }
